@@ -1,5 +1,49 @@
+<script lang="ts">
+import Input from "@/components/Input.vue";
+import Wysiwyg from "@/components/Wysiwyg.vue";
+import { defineComponent, ref } from "vue";
+
+export default defineComponent({
+    components: {
+        Input,
+        Wysiwyg,
+    },
+    setup() {
+        const input = ref("");
+        const wysiwyg = ref<any | null>(null);
+
+        return {
+            handleChangeInput(event: Event) {
+                input.value = (event.target as HTMLInputElement).value;
+            },
+            handleChangeWysiwyg(event: Event) {
+                const element = document.createElement("div");
+                element.innerHTML = (event.target as HTMLDivElement).innerHTML;
+
+                const imgs = element.querySelectorAll("img");
+
+                imgs.forEach((img) => {
+                    const text = document.createTextNode(
+                        img.getAttribute("alt") || ""
+                    );
+
+                    element.replaceChild(text, img);
+                });
+
+                input.value = element.innerText;
+            },
+            input,
+            wysiwyg,
+        };
+    },
+});
+</script>
+
 <template>
-    <div>App</div>
+    <div>
+        <Input :onChange="handleChangeInput" :value="input" />
+        <Wysiwyg :onChange="handleChangeWysiwyg" :value="input" ref="wysiwyg" />
+    </div>
 </template>
 
 <style>
@@ -38,6 +82,7 @@ html {
 main {
     display: block;
     min-height: 100%;
+    padding: 10px;
     width: 100%;
 }
 </style>
