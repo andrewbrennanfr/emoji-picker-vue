@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts">
-import twemoji from "twemoji";
-import { computed, defineComponent, PropType } from "vue";
+import twemoji from 'twemoji'
+import { computed, defineComponent, PropType } from 'vue'
 
 export default defineComponent({
     props: {
@@ -27,10 +27,15 @@ export default defineComponent({
     },
     setup(props) {
         return {
-            html: computed(() => twemoji.parse(props.value)),
-        };
+            html: computed(() =>
+                twemoji.parse(props.value, {
+                    folder: 'svg',
+                    ext: '.svg',
+                })
+            ),
+        }
     },
-});
+})
 </script>
 
 <style>
